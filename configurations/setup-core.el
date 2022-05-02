@@ -18,36 +18,50 @@
 (setq use-package-always-ensure t)
 ;; (setq use-package-verbose t)
 
-(use-package all-the-icons
+;; Ivy
+(use-package ivy
+  :hook (after-init . ivy-mode)
   :config
-  (message "Loaded all-the-icons"))
+  (setq ivy-height 10
+		ivy-use-virtual-buffers t
+		ivy-count-format "(%d/%d) "
+		ivy-use-selectable-prompt t
+		ivy-display-style 'fancy)
+  (define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done)
+  (define-key ivy-mode-map       (kbd "<escape>") #'kill-current-buffer)
+  (define-key ivy-minibuffer-map (kbd "<escape>") #'minibuffer-keyboard-quit))
 
-(use-package helm
-  :init
-  (add-hook 'emacs-startup-hook 'helm-mode 1)
-  :bind
-  ([remap execute-extended-command] . helm-M-x)
-  ("C-x b" . helm-mini)
-  ("C-s" . swiper)
+(use-package ivy-rich
+  :hook (ivy-mode . ivy-rich-mode)
+  :custom
+  (setq ivy-virtual-abbreviate 'abbreviate
+		ivy-rich-switch-buffer-align-virtual-buffer nil
+		ivy-rich-path-style 'abbreviate))
+
+(use-package ivy-prescient
+  :after counsel
+  :custom
+  (ivy-prescient-enable-filtering nil)
   :config
-  (setq helm-M-x-fuzzy-match t                ; Enable fuzzy match
-		helm-split-window-in-side-p t))        ; Open Helm buffer inside current window
+  ;; Uncomment the following line to have sorting remembered across sessions!
+  ;(prescient-persist-mode 1)
+  (ivy-prescient-mode 1))
 
-(use-package swiper-helm
-  :ensure t)
-
-(use-package which-key
+;; counsel
+(use-package counsel
+  :hook (ivy-mode . counsel-mode)
   :config
-  (which-key-mode)
-  (setq which-key-idle-delay 1.25))
+  (setq counsel-rg-base-command "rg -i -M 120 --no-heading --line-number %s ."
+		ivy-initial-inputs-alist nil))
 
-(use-package helpful
-  :bind
-  ([remap describe-function] . helpful-callable)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . helpful-variable)
-  ([remap describe-key] . helpful-key))
+;; Search files, and do it with speed and style
+(use-package swiper
+  :after ivy
+  :bind ("C-s" . swiper-thing-at-point)
+  :config
+  (setq swiper-goto-start-of-match t))
 
+;; projectile
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
@@ -65,6 +79,40 @@
   (when (file-directory-p "~/Developer")
     (setq projectile-project-search-path '("~/Developer")))
   (setq projectile-switch-project-action #'projectile-dired))
+
+;; all-the-icons packages
+(use-package all-the-icons
+  :config
+  (message "Loaded all-the-icons"))
+
+(use-package all-the-icons-ivy
+  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
+
+(use-package all-the-icons-ivy-rich
+  :after ivy
+  :init (all-the-icons-ivy-rich-mode 1)
+  :custom
+  (setq all-the-icons-ivy-rich-icon t
+        all-the-icons-ivy-rich-color-icon nil
+        all-the-icons-ivy-rich-icon-size 1.0))
+
+;; Show the key bindings following your currently entered incomplete command
+(use-package which-key
+  :config
+  (which-key-mode)
+  (setq which-key-idle-delay 1.25))
+
+;; Replace built-in help
+(use-package helpful
+  :commands (helpful-callable helpful-variable helpful-command helpful-key)
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
 
 (setq idle-update-delay 1
 	  initial-scratch-message ""
