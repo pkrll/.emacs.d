@@ -8,9 +8,9 @@
 (setq inhibit-startup-message t
       linum-format "%4d "
       frame-title-format '((:eval
-			    (if (buffer-file-name)
-				(abbreviate-file-name (buffer-file-name))
-			      "%b"))))
+							(if (buffer-file-name)
+								(abbreviate-file-name (buffer-file-name))
+							  "%b"))))
 
 ;; Theme
 (use-package dracula-theme
@@ -20,5 +20,5 @@
 
 ;; Font settings
 (set-face-attribute 'default nil
-		    :font "Fira Code Retina"
-		    :height 190)
+					:font "Fira Code Retina"
+					:height 190)
