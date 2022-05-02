@@ -2,13 +2,21 @@
 
 (use-package no-littering)
 
+(defvar backup-directory (concat user-emacs-directory "/var/backup/"))
+(if (not (file-exists-p backup-directory))
+	(make-directory backup-directory t))
+
+(defvar auto-save-directory (concat user-emacs-directory "/var/auto-save/"))
+(if (not (file-exists-p auto-save-directory))
+	(make-directory auto-save-directory t))
+
 (setq make-backup-files t
-	  backup-directory-alist `((".*" ,(no-littering-expand-var-file-name "backup/")))
+	  backup-directory-alist `((".*" . ,backup-directory))
 	  backup-by-copying t
 	  delete-old-versions t
 	  kept-old-versions 1
 	  kept-new-versions 1
-	  auto-save-file-name-transforms `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
+	  auto-save-file-name-transforms `((".*" ,auto-save-directory t))
 	  auto-save-timeout 20
 	  auto-save-interval 200
 	  create-lockfiles nil
