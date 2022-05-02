@@ -1,16 +1,14 @@
 (provide 'setup-editing)
 
-(defvar backup-directory "~/.emacs.d/.backups/")
-(if (not (file-exists-p backup-directory))
-	(make-directory backup-directory t))
+(use-package no-littering)
 
 (setq make-backup-files t
-	  backup-directory-alist `((".*" . ,backup-directory))
+	  backup-directory-alist `((".*" ,(no-littering-expand-var-file-name "backup/")))
 	  backup-by-copying t
 	  delete-old-versions t
 	  kept-old-versions 1
 	  kept-new-versions 1
-	  auto-save-file-name-transforms `((".*" ,backup-directory t))
+	  auto-save-file-name-transforms `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
 	  auto-save-timeout 20
 	  auto-save-interval 200
 	  create-lockfiles nil
