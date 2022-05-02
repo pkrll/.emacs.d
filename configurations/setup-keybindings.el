@@ -1,8 +1,14 @@
 (provide 'setup-keybindings)
 
-;; Make ESC quit prompts
+(defun pkrll/toggle-treemacs ()
+  (interactive)
+  (treemacs)
+  (if (eq major-mode 'treemacs-mode)
+	  (treemacs-select-window)))
+
 (add-hook 'emacs-startup-hook
 		  (lambda ()
+			;; Make ESC quit prompts
 			(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 			;; Navigation
@@ -10,19 +16,16 @@
 			(define-key global-map (kbd "C-'") (kbd "<right>"))
 			(define-key global-map (kbd "C-;") (kbd "<down>"))
 			(define-key global-map (kbd "C-l") (kbd "<left>"))
-
+			;; Word navigation
 			(subword-mode +1)
-
 			(define-key global-map (kbd "A-<left>") 'backward-sexp)
 			(define-key global-map (kbd "A-<right>") 'forward-sexp)
 			(define-key global-map (kbd "A-<backspace>") 'backward-kill-sexp)
-
 			(define-key global-map (kbd "C-<left>") 'subword-backward)
 			(define-key global-map (kbd "C-M-l") 'subword-backward)
 			(define-key global-map (kbd "C-<right>") 'subword-forward)
 			(define-key global-map (kbd "C-M-'") 'subword-forward)
 			;;(define-key global-map (kbd "C-<backspace>") (lambda () (interactive) (delete-region (point) (point-at-bol))))
-
 			(define-key global-map (kbd "M-<left>") 'beginning-of-line-text)
 			(define-key global-map (kbd "M-l") 'beginning-of-line-text)
 			(define-key global-map (kbd "M-<right>") 'end-of-line)
@@ -32,11 +35,11 @@
 			(define-key global-map (kbd "M-p") 'beginning-of-buffer)
 			(define-key global-map (kbd "M-<down>") 'end-of-buffer)
 			(define-key global-map (kbd "M-;") 'end-of-buffer)
-
 			;; Misc
 			(define-key global-map (kbd "M-/") 'comment-or-uncomment-region)
 			(define-key global-map (kbd "M-+") 'text-scale-increase)
 			(define-key global-map (kbd "M-_") 'text-scale-decrease)
 			(define-key global-map (kbd "M-)") (lambda () (interactive) (text-scale-set 0)))
 			(define-key global-map (kbd "M-a") 'mark-whole-buffer)
+			(define-key global-map (kbd "M-0") 'pkrll/toggle-treemacs)
 			))
