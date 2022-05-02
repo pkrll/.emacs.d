@@ -33,8 +33,10 @@
 			(define-key global-map (kbd "M-<down>") 'end-of-buffer)
 			(define-key global-map (kbd "M-;") 'end-of-buffer)
 
-			;; 
+			;; Misc
+			(define-key global-map (kbd "M-/") 'comment-or-uncomment-region)
 			(define-key global-map (kbd "M-+") 'text-scale-increase)
 			(define-key global-map (kbd "M-_") 'text-scale-decrease)
 			(define-key global-map (kbd "M-)") (lambda () (interactive) (text-scale-set 0)))
+			(define-key global-map (kbd "M-a") 'mark-whole-buffer)
 			))
