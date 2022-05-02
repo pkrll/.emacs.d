@@ -4,7 +4,7 @@
 		  (lambda ()
 			(linum-mode)               ; Toggle on line mode
 			(electric-pair-mode 1)     ; Create pair brackets
-			(electric-indent-mode T))) ; Sane indentation policy
+			(electric-indent-mode t))) ; Sane indentation policy
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -108,3 +108,17 @@
   (treemacs-fringe-indicator-mode 'always)
   (treemacs-follow-mode t)
   (treemacs-project-follow-mode t))
+
+(use-package flycheck
+  :init (global-flycheck-mode))
+
+(use-package git-gutter
+  :hook (prog-mode . git-gutter-mode)
+  :config
+  (setq git-gutter:update-interval 0.1))
+
+(use-package git-gutter-fringe
+  :config
+  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted [224] nil nil '(center repeated)))
